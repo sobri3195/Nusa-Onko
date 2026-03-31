@@ -18,8 +18,8 @@ export function ProjectsPage({ projects, onDelete, onFavorite }: { projects: Pro
     .filter((p) => status === 'all' || p.status === status)
   , [projects, search, category, status, sort]);
 
-  return <div className="space-y-4">
-    <div className="flex items-center justify-between"><h1 className="text-xl font-bold">Projects</h1><Link to="/projects/new" className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground">Tambah</Link></div>
+  return <div className="space-y-4 animate-in">
+    <div className="flex flex-wrap items-center justify-between gap-2"><h1 className="text-xl font-bold">Projects</h1><Link to="/projects/new" className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground shadow hover:opacity-90">Tambah</Link></div>
     <Input placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
     <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
       <Select value={category} onChange={(e) => setCategory(e.target.value)}><option value="all">Semua kategori</option>{categories.map((c)=><option key={c}>{c}</option>)}</Select>
