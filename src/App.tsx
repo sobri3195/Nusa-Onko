@@ -1,5 +1,5 @@
 import { Bell, Blocks, FileText, Home, Users } from 'lucide-react';
-import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { RTStoreProvider, useRTStore } from '@/lib/rt-store';
 import { PatientsPage } from '@/pages/patients-page';
 import { PatientDetailPage } from '@/pages/patient-detail-page';
@@ -8,6 +8,7 @@ import { ModuleDetailPage } from '@/pages/module-detail-page';
 import { AlertsCenterPage } from '@/pages/alerts-center-page';
 import { ReportsPage } from '@/pages/reports-page';
 import { MobileBottomNav, MobileTopBar } from '@/components/mobile/mobile-ui';
+import { DashboardPage } from '@/pages/dashboard-page';
 import { cn } from '@/lib/utils';
 
 const desktopItems = [
@@ -49,7 +50,7 @@ function Layout() {
         </aside>
         <main className="pb-28 md:pb-6">
           <Routes>
-            <Route path="/" element={<Navigate to="/modules" replace />} />
+            <Route path="/" element={<DashboardPage />} />
             <Route path="/patients" element={<PatientsPage />} />
             <Route path="/patients/:id" element={<PatientDetailPage />} />
             <Route path="/modules" element={<ModulesOverviewPage />} />
