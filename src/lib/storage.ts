@@ -9,10 +9,25 @@ export const storage = {
     const data = localStorage.getItem(PROJECTS_KEY);
     if (!data) localStorage.setItem(PROJECTS_KEY, JSON.stringify(seedProjects));
   },
-  getProjects: (): Project[] => JSON.parse(localStorage.getItem(PROJECTS_KEY) ?? '[]'),
+  getProjects: (): Project[] => {
+    const raw = localStorage.getItem(PROJECTS_KEY);
+    if (!raw) return [];
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  },
   saveProjects: (projects: Project[]) => localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects)),
   reset: () => localStorage.removeItem(PROJECTS_KEY),
   restoreSeed: () => localStorage.setItem(PROJECTS_KEY, JSON.stringify(seedProjects)),
   getTheme: () => localStorage.getItem(THEME_KEY) ?? 'light',
-  setTheme: (theme: 'light' | 'dark') => localStorage.setItem(THEME_KEY, theme)
+  setTheme: (theme: 'light' | 'dark') => localStorage.setItem(THEME_KEY, theme),
+  exportProjects: () => JSON.stringify(storage.getProjects(), null, 2),
+  importProjects: (rawJson: string) => {
+    const parsed = JSON.parse(rawJson);
+    if (!Array.isArray(parsed)) throw new Error('Format JSON tidak valid');
+    storage.saveProjects(parsed as Project[]);
+  }
 };
