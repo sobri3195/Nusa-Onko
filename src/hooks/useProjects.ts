@@ -34,7 +34,8 @@ export const useProjects = () => {
     setProjects(storage.getProjects());
     toast.success('Seed data dipulihkan');
   };
+  const reload = () => setProjects(storage.getProjects());
 
   const favorites = useMemo(() => projects.filter((p) => p.favorite), [projects]);
-  return { projects, favorites, create, update, remove, toggleFavorite, resetStorage, restoreSeed };
+  return { projects, favorites, create, update, remove, toggleFavorite, resetStorage, restoreSeed, reload };
 };

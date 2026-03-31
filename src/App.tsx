@@ -20,7 +20,7 @@ function App() {
         <Route path="/projects/:id" element={<ProjectDetailPage projects={store.projects} onDelete={store.remove} onFavorite={store.toggleFavorite} />} />
         <Route path="/projects/:id/edit" element={<ProjectFormPage projects={store.projects} onCreate={store.create} onUpdate={store.update} />} />
         <Route path="/favorites" element={<FavoritesPage projects={store.projects} onDelete={store.remove} onFavorite={store.toggleFavorite} />} />
-        <Route path="/settings" element={<SettingsPage onReset={store.resetStorage} onRestore={store.restoreSeed} />} />
+        <Route path="/settings" element={<SettingsPage onReset={store.resetStorage} onRestore={store.restoreSeed} onRefresh={store.reload} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <BottomNav />
