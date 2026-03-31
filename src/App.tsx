@@ -12,9 +12,9 @@ function App() {
   const store = useProjects();
 
   return (
-    <div className="mx-auto min-h-screen max-w-3xl p-4 pb-20 md:pb-6">
+    <div className="mx-auto min-h-screen max-w-4xl p-3 pb-20 sm:p-4 md:pb-6">
       <Routes>
-        <Route path="/" element={<HomePage projects={store.projects} />} />
+        <Route path="/" element={<HomePage projects={store.projects} onDelete={store.remove} />} />
         <Route path="/projects" element={<ProjectsPage projects={store.projects} onDelete={store.remove} onFavorite={store.toggleFavorite} />} />
         <Route path="/projects/new" element={<ProjectFormPage projects={store.projects} onCreate={store.create} onUpdate={store.update} />} />
         <Route path="/projects/:id" element={<ProjectDetailPage projects={store.projects} onDelete={store.remove} onFavorite={store.toggleFavorite} />} />

@@ -10,7 +10,7 @@ export function ProjectFormPage({ projects, onCreate, onUpdate }: { projects: Pr
     .filter((p) => p.id !== edit?.id)
     .map((p) => p.slug.toLowerCase());
 
-  return <div className="space-y-3">
+  return <div className="space-y-3 animate-in">
     <h1 className="text-xl font-bold">{edit ? 'Edit Project' : 'Tambah Project'}</h1>
     <ProjectForm initial={edit} existingSlugs={existingSlugs} onSubmit={(payload) => { edit ? onUpdate(edit.id, payload) : onCreate(payload); navigate('/projects'); }} />
   </div>;

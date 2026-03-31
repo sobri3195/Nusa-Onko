@@ -10,10 +10,14 @@ const items = [
 
 export function BottomNav() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border/70 bg-card/95 backdrop-blur md:hidden">
       <div className="mx-auto grid max-w-lg grid-cols-4">
         {items.map(({ to, label, icon: Icon }) => (
-          <NavLink key={to} to={to} className={({ isActive }) => `flex flex-col items-center gap-1 p-2 text-xs ${isActive ? 'text-primary' : 'text-muted-foreground'}`}>
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) => `flex flex-col items-center gap-1 p-2 text-xs transition-all duration-200 ${isActive ? 'text-primary' : 'text-muted-foreground'}`}
+          >
             <Icon size={18} />
             {label}
           </NavLink>
