@@ -31,6 +31,11 @@ export function ModuleDetailPage() {
 
   return <div className="space-y-4 p-3 md:p-6">
     <ModuleHeader title={moduleDef.name} purpose={moduleDef.purpose} />
+    <ModuleFormSection title="10 Fitur Modul">
+      <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+        {moduleDef.features.map((feature) => <li key={feature}>{feature}</li>)}
+      </ul>
+    </ModuleFormSection>
     <ModuleFormSection title="Input Form (mobile single-column)">
       {moduleDef.fields.map((field) => <div key={field.name} className="space-y-1">
         <label className="text-sm font-medium">{field.label}</label>

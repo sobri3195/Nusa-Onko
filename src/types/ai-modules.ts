@@ -22,6 +22,7 @@ export interface ModuleDefinition {
   key: string;
   name: string;
   purpose: string;
+  features: string[];
   fields: ModuleField[];
   severityField: string;
   run: (payload: Record<string, unknown>, history: AnalysisResult[]) => AnalysisResult;

@@ -53,7 +53,7 @@ export function MobileTopBar({ title, onSearch, onFilter, onAdd, backButton }: {
   );
 }
 
-export function MobileModuleCard({ title, purpose, status, runs, isFavorite = false }: { title: string; purpose: string; status: 'Active' | 'In Review' | 'High Alert'; runs: number; isFavorite?: boolean }) {
+export function MobileModuleCard({ title, purpose, status, runs, featureCount, isFavorite = false }: { title: string; purpose: string; status: 'Active' | 'In Review' | 'High Alert'; runs: number; featureCount: number; isFavorite?: boolean }) {
   return (
     <Card className="space-y-2 p-3">
       <div className="flex items-start justify-between gap-2">
@@ -67,6 +67,7 @@ export function MobileModuleCard({ title, purpose, status, runs, isFavorite = fa
         <Badge>{status}</Badge>
         <span>{runs} analisis</span>
       </div>
+      <p className="text-xs text-muted-foreground">{featureCount} fitur siap pakai</p>
     </Card>
   );
 }
