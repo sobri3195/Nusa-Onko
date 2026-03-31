@@ -18,6 +18,18 @@ export const MODULE_DEFINITIONS: ModuleDefinition[] = [
     key: 'autocontour-one',
     name: 'AUTOContour-One',
     purpose: 'Auto-segmentation target dan OAR',
+    features: [
+      'Auto-segmentation GTV/CTV/PTV',
+      'Delineasi OAR multi-site',
+      'Model confidence heatmap',
+      'Batch contour generation',
+      'Auto contour smoothing',
+      'Kontrol prior atlas',
+      'QC overlap check',
+      'DICOM RTSTRUCT export',
+      'Versioning contour revision',
+      'Estimasi time-saved per case',
+    ],
     severityField: 'contourStatus',
     fields: [
       { name: 'patientId', label: 'Patient', type: 'select', required: true },
@@ -46,6 +58,18 @@ export const MODULE_DEFINITIONS: ModuleDefinition[] = [
     key: 'dose-drift-detector',
     name: 'DOSE-DRIFT DETECTOR',
     purpose: 'Deteksi drift anatomi harian',
+    features: [
+      'Tracking pergeseran tumor harian',
+      'Analisis perubahan volume organ',
+      'Skor drift berbasis multi-parameter',
+      'Deteksi threshold adaptive planning',
+      'Ringkasan CBCT vs planning CT',
+      'Tren drift per fraksi',
+      'Alert drift severity otomatis',
+      'Rekomendasi replanning cepat',
+      'Audit perubahan setup',
+      'Histori drift pasien longitudinal',
+    ],
     severityField: 'driftLevel',
     fields: [
       { name: 'patientId', label: 'Patient', type: 'select', required: true },
@@ -69,6 +93,18 @@ export const MODULE_DEFINITIONS: ModuleDefinition[] = [
   },
   {
     key: 'mucositis-cam', name: 'MUCOSITIS-CAM', purpose: 'Prediksi risiko mukositis', severityField: 'mucositisRiskLevel',
+    features: [
+      'Prediksi risiko grade mukositis',
+      'Serial risk tracking per fraksi',
+      'Integrasi skor nyeri oral',
+      'Analisis dosis oral cavity',
+      'Deteksi tren memburuk dini',
+      'Saran intervensi oral care',
+      'Komparasi dengan kunjungan sebelumnya',
+      'Risk stratification otomatis',
+      'Ringkasan klinis siap dokumentasi',
+      'Pemantauan outcome suportif',
+    ],
     fields: [
       { name: 'patientId', label: 'Patient', type: 'select', required: true }, { name: 'visitDate', label: 'Visit Date', type: 'date', required: true },
       { name: 'fractionNumber', label: 'Fraction', type: 'number', required: true }, { name: 'oralDoseMean', label: 'Oral Dose Mean', type: 'number', required: true },
@@ -88,6 +124,18 @@ export const MODULE_DEFINITIONS: ModuleDefinition[] = [
   },
   {
     key: 'pneumoshield', name: 'PNEUMOSHIELD', purpose: 'Prediksi pneumonitis', severityField: 'pneumonitisRiskLevel',
+    features: [
+      'Prediksi risiko pneumonitis simptomatik',
+      'Analisis DVH paru komprehensif',
+      'Integrasi radiomics thorax',
+      'Koreksi faktor riwayat merokok',
+      'Koreksi penyakit paru dasar',
+      'Identifikasi faktor risiko utama',
+      'Risk tier low-moderate-high',
+      'Saran jadwal follow-up',
+      'Monitoring tren risiko longitudinal',
+      'Output ringkas untuk M&M review',
+    ],
     fields: [
       { name: 'patientId', label: 'Patient', type: 'select', required: true }, { name: 'lungMeanDose', label: 'Lung Mean Dose', type: 'number', required: true },
       { name: 'lungV20', label: 'Lung V20', type: 'number', required: true }, { name: 'lungV5', label: 'Lung V5', type: 'number', required: true },
@@ -107,6 +155,18 @@ export const MODULE_DEFINITIONS: ModuleDefinition[] = [
   },
   {
     key: 'planpilot-vmat', name: 'PLANPILOT-VMAT', purpose: 'Evaluasi kualitas plan VMAT', severityField: 'planQualityLabel',
+    features: [
+      'Scoring kualitas plan otomatis',
+      'Audit PTV coverage',
+      'Audit OAR pass-rate',
+      'Evaluasi conformity index',
+      'Evaluasi homogeneity index',
+      'Perbandingan manual vs AI-assisted',
+      'Highlight kelemahan dosimetri',
+      'Label accept/review/suboptimal',
+      'Ringkasan rekomendasi optimisasi',
+      'Pelacakan mutu planning periodik',
+    ],
     fields: [
       { name: 'patientId', label: 'Patient', type: 'select', required: true }, { name: 'ptvCoverage', label: 'PTV Coverage (%)', type: 'number', required: true },
       { name: 'conformityIndex', label: 'Conformity Index', type: 'number', required: true }, { name: 'homogeneityIndex', label: 'Homogeneity Index', type: 'number', required: true },
@@ -125,6 +185,18 @@ export const MODULE_DEFINITIONS: ModuleDefinition[] = [
   },
   {
     key: 'setup-error-zero', name: 'SETUP-ERROR ZERO', purpose: 'Deteksi deviasi setup', severityField: 'setupSeverity',
+    features: [
+      'Deteksi translasi 3-axis',
+      'Deteksi rotasi pitch-roll-yaw',
+      'Skor error setup realtime',
+      'Severity triage otomatis',
+      'Rekomendasi couch correction',
+      'Status hold/proceed treatment',
+      'Audit error per fraksi',
+      'Trend setup consistency',
+      'Notifikasi deviasi kritikal',
+      'Dashboard performa setup tim',
+    ],
     fields: [
       { name: 'patientId', label: 'Patient', type: 'select', required: true }, { name: 'fractionNumber', label: 'Fraction', type: 'number', required: true },
       { name: 'shiftX', label: 'Shift X', type: 'number', required: true }, { name: 'shiftY', label: 'Shift Y', type: 'number', required: true }, { name: 'shiftZ', label: 'Shift Z', type: 'number', required: true },
@@ -144,6 +216,18 @@ export const MODULE_DEFINITIONS: ModuleDefinition[] = [
   },
   {
     key: 'rt-docwatch', name: 'RT-DOCWATCH', purpose: 'Audit konsistensi dokumen', severityField: 'severityLevel',
+    features: [
+      'Deteksi mismatch laterality',
+      'Validasi konsistensi dosis',
+      'Cross-check simulasi vs resep',
+      'Cross-check resep vs plan',
+      'Cross-check plan vs verifikasi',
+      'Skor konsistensi dokumen',
+      'Flag item perlu review manual',
+      'Ringkasan mismatch otomatis',
+      'Severity tagging audit finding',
+      'Checklist QA dokumentasi RT',
+    ],
     fields: [
       { name: 'patientId', label: 'Patient', type: 'select', required: true }, { name: 'simulationNote', label: 'Simulation Note', type: 'textarea', required: true },
       { name: 'prescriptionText', label: 'Prescription', type: 'textarea', required: true }, { name: 'treatmentPlanText', label: 'Treatment Plan', type: 'textarea', required: true },
@@ -166,6 +250,18 @@ export const MODULE_DEFINITIONS: ModuleDefinition[] = [
   },
   {
     key: 'hippocampus-saver', name: 'HIPPOCAMPUS-SAVER AI', purpose: 'Prediksi cognitive decline', severityField: 'cognitiveDeclineRiskLevel',
+    features: [
+      'Prediksi cognitive decline pasca RT',
+      'Analisis dosis hippocampus mean/max',
+      'Integrasi MRI radiomics score',
+      'Koreksi faktor usia',
+      'Koreksi baseline cognitive score',
+      'Risk level stratification',
+      'Saran follow-up neurokognitif',
+      'Saran rujukan neuropsikologi',
+      'Trend risiko antar evaluasi',
+      'Ringkasan risiko siap MDT',
+    ],
     fields: [
       { name: 'patientId', label: 'Patient', type: 'select', required: true }, { name: 'hippocampalDoseMean', label: 'Hippocampal Dose Mean', type: 'number', required: true },
       { name: 'hippocampalDoseMax', label: 'Hippocampal Dose Max', type: 'number', required: true }, { name: 'mriRadiomicsScore', label: 'MRI Radiomics', type: 'number', required: true },
@@ -182,6 +278,18 @@ export const MODULE_DEFINITIONS: ModuleDefinition[] = [
   },
   {
     key: 'waitlist-fair', name: 'WAITLIST-FAIR', purpose: 'Prioritisasi antrean RT', severityField: 'priorityLabel',
+    features: [
+      'Scoring prioritas pasien otomatis',
+      'Kalkulasi urgensi klinis',
+      'Kalkulasi dampak lama tunggu',
+      'Kalkulasi symptom burden',
+      'Kalkulasi agresivitas kanker',
+      'Koreksi constraint mesin',
+      'Ranking antrean realtime',
+      'Label expedite/priority/standard',
+      'Transparansi rationale prioritas',
+      'Simulasi skenario slot treatment',
+    ],
     fields: [
       { name: 'patientId', label: 'Patient', type: 'select', required: true }, { name: 'diagnosis', label: 'Diagnosis', type: 'text', required: true },
       { name: 'urgencyLevel', label: 'Urgency (1-5)', type: 'number', required: true }, { name: 'waitingDays', label: 'Waiting Days', type: 'number', required: true },
@@ -200,6 +308,18 @@ export const MODULE_DEFINITIONS: ModuleDefinition[] = [
   },
   {
     key: 'liverrild-guard', name: 'LIVERRILD-GUARD', purpose: 'Prediksi risiko RILD', severityField: 'rildRiskLevel',
+    features: [
+      'Prediksi risiko RILD individual',
+      'Integrasi Child-Pugh class',
+      'Analisis biomarker albumin/bilirubin',
+      'Analisis liver mean dose',
+      'Analisis dose heterogeneity',
+      'Koreksi normal liver volume',
+      'Risk level stratification otomatis',
+      'Saran monitoring fungsi hati',
+      'Warning high-risk hepatotoksisitas',
+      'Ringkasan risiko untuk tumor board',
+    ],
     fields: [
       { name: 'patientId', label: 'Patient', type: 'select', required: true }, { name: 'childPughClass', label: 'Child Pugh', type: 'select', options: ['A', 'B', 'C'], required: true },
       { name: 'albumin', label: 'Albumin', type: 'number', required: true }, { name: 'bilirubin', label: 'Bilirubin', type: 'number', required: true },

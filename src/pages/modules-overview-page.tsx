@@ -56,7 +56,7 @@ export function ModulesOverviewPage() {
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {visibleModules.map(({ module, runCount, status }, index) => (
             <Link key={module.key} to={`/modules/${module.key}`}>
-              <MobileModuleCard title={module.name} purpose={module.purpose} status={status} runs={runCount} isFavorite={index < 3} />
+              <MobileModuleCard title={module.name} purpose={module.purpose} status={status} runs={runCount} featureCount={module.features.length} isFavorite={index < 3} />
             </Link>
           ))}
         </div>
