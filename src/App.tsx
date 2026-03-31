@@ -1,41 +1,26 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { BottomNav } from '@/components/layout/bottom-nav';
-import { useProjects } from '@/hooks/useProjects';
-import { FavoritesPage } from '@/pages/favorites-page';
-import { HomePage } from '@/pages/home-page';
-import { ProjectDetailPage } from '@/pages/project-detail-page';
-import { ProjectFormPage } from '@/pages/project-form-page';
-import { ProjectsPage } from '@/pages/projects-page';
-import { SettingsPage } from '@/pages/settings-page';
-import { useModules } from '@/hooks/useModules';
-import { ModulesPage } from '@/pages/modules-page';
-import { ModuleFormPage } from '@/pages/module-form-page';
-import { ModuleDetailPage } from '@/pages/module-detail-page';
+import { RTDashboardPage } from '@/pages/rt-dashboard-page';
+import { RTPatientsPage } from '@/pages/rt-patients-page';
+import { RTPatientDetailPage } from '@/pages/rt-patient-detail-page';
+import { RTWorkflowPage } from '@/pages/rt-workflow-page';
+import { RTModulePage } from '@/pages/rt-modules-page';
+import { RTAlertsPage } from '@/pages/rt-alerts-page';
+import { RTReportsPage } from '@/pages/rt-reports-page';
+import { RTSettingsPage } from '@/pages/rt-settings-page';
 
 function App() {
-  const store = useProjects();
-  const moduleStore = useModules();
-
   return (
-    <div className="mx-auto min-h-screen max-w-4xl p-3 pb-20 sm:p-4 md:pb-6">
-      <Routes>
-        <Route path="/" element={<HomePage projects={store.projects} onDelete={store.remove} />} />
-        <Route path="/projects" element={<ProjectsPage projects={store.projects} onDelete={store.remove} onFavorite={store.toggleFavorite} />} />
-        <Route path="/projects/new" element={<ProjectFormPage projects={store.projects} onCreate={store.create} onUpdate={store.update} />} />
-        <Route path="/projects/:id" element={<ProjectDetailPage projects={store.projects} onDelete={store.remove} onFavorite={store.toggleFavorite} />} />
-        <Route path="/projects/:id/edit" element={<ProjectFormPage projects={store.projects} onCreate={store.create} onUpdate={store.update} />} />
-
-
-        <Route path="/modules" element={<ModulesPage modules={moduleStore.modules} onDelete={moduleStore.remove} />} />
-        <Route path="/modules/new" element={<ModuleFormPage modules={moduleStore.modules} onCreate={moduleStore.create} onUpdate={moduleStore.update} />} />
-        <Route path="/modules/:id" element={<ModuleDetailPage modules={moduleStore.modules} onDelete={moduleStore.remove} />} />
-        <Route path="/modules/:id/edit" element={<ModuleFormPage modules={moduleStore.modules} onCreate={moduleStore.create} onUpdate={moduleStore.update} />} />
-        <Route path="/favorites" element={<FavoritesPage projects={store.projects} onDelete={store.remove} onFavorite={store.toggleFavorite} />} />
-        <Route path="/settings" element={<SettingsPage onReset={store.resetStorage} onRestore={store.restoreSeed} onRefresh={store.reload} />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-      <BottomNav />
-    </div>
+    <Routes>
+      <Route path="/" element={<RTDashboardPage />} />
+      <Route path="/patients" element={<RTPatientsPage />} />
+      <Route path="/patients/:id" element={<RTPatientDetailPage />} />
+      <Route path="/workflow" element={<RTWorkflowPage />} />
+      <Route path="/modules/:moduleKey" element={<RTModulePage />} />
+      <Route path="/alerts" element={<RTAlertsPage />} />
+      <Route path="/reports" element={<RTReportsPage />} />
+      <Route path="/settings" element={<RTSettingsPage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
