@@ -2,8 +2,9 @@ import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { MODULE_MAP } from '@/services/module-definitions';
 import { useRTStore } from '@/lib/rt-store';
-import { AnalysisResultPanel, HistoryTable, ModuleFormSection, ModuleHeader, PatientSelector, SaveResultDialog } from '@/components/rt/reusable';
+import { ModuleFormSection, ModuleHeader, PatientSelector, SaveResultDialog } from '@/components/rt/reusable';
 import { Button } from '@/components/ui/button';
+import { MobileActionBar, MobileHistoryAccordion, MobileResultCard } from '@/components/mobile/mobile-ui';
 
 export function ModuleDetailPage() {
   const { moduleKey = '' } = useParams();
@@ -28,17 +29,32 @@ export function ModuleDetailPage() {
     setResult(runModule(moduleKey, payload));
   };
 
-  return <div className="space-y-4 p-6">
+  return <div className="space-y-4 p-3 md:p-6">
     <ModuleHeader title={moduleDef.name} purpose={moduleDef.purpose} />
-    <ModuleFormSection title="Input Form">
+    <ModuleFormSection title="Input Form (mobile single-column)">
       {moduleDef.fields.map((field) => <div key={field.name} className="space-y-1">
         <label className="text-sm font-medium">{field.label}</label>
-        {field.name === 'patientId' ? <PatientSelector value={form[field.name] ?? ''} onChange={(v) => setForm((p) => ({ ...p, [field.name]: v }))} patients={patients} /> : field.type === 'textarea' ? <textarea className="w-full rounded border p-2" value={form[field.name] ?? ''} onChange={(e) => setForm((p) => ({ ...p, [field.name]: e.target.value }))} /> : field.type === 'select' ? <select className="w-full rounded border p-2" value={form[field.name] ?? ''} onChange={(e) => setForm((p) => ({ ...p, [field.name]: e.target.value }))}><option value="">Pilih</option>{field.options?.map((o) => <option key={o} value={o}>{o}</option>)}</select> : <input type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'} className="w-full rounded border p-2" value={form[field.name] ?? ''} onChange={(e) => setForm((p) => ({ ...p, [field.name]: e.target.value }))} />}
+        {field.name === 'patientId' ? <PatientSelector value={form[field.name] ?? ''} onChange={(v) => setForm((p) => ({ ...p, [field.name]: v }))} patients={patients} /> : field.type === 'textarea' ? <textarea className="min-h-24 w-full rounded border p-3" value={form[field.name] ?? ''} onChange={(e) => setForm((p) => ({ ...p, [field.name]: e.target.value }))} /> : field.type === 'select' ? <select className="h-11 w-full rounded border p-2" value={form[field.name] ?? ''} onChange={(e) => setForm((p) => ({ ...p, [field.name]: e.target.value }))}><option value="">Pilih</option>{field.options?.map((o) => <option key={o} value={o}>{o}</option>)}</select> : <input type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'} className="h-11 w-full rounded border p-2" value={form[field.name] ?? ''} onChange={(e) => setForm((p) => ({ ...p, [field.name]: e.target.value }))} />}
         {errors[field.name] && <p className="text-xs text-red-600">{errors[field.name]}</p>}
       </div>)}
-      <div className="flex gap-2"><Button onClick={submit}>Run Analysis</Button><Button variant="outline" onClick={() => { setForm({}); setErrors({}); }}>Reset</Button><SaveResultDialog /></div>
+
+      <MobileActionBar>
+        <Button className="flex-1" onClick={submit}>Run Analysis</Button>
+        <Button className="flex-1" variant="outline" onClick={() => { setForm({}); setErrors({}); }}>Reset</Button>
+        <SaveResultDialog />
+      </MobileActionBar>
     </ModuleFormSection>
-    <AnalysisResultPanel result={result} />
-    <HistoryTable rows={history.map((h) => ({ id: h.id, patientId: h.patientId, score: h.result.score, severity: h.result.severity, generatedAt: h.result.generatedAt }))} />
+
+    {result && <MobileResultCard score={result.score} severity={result.severity} summary={result.summary} recommendation={result.recommendation} />}
+
+    <MobileActionBar>
+      <Button className="flex-1" variant="outline">Save to Patient</Button>
+      <Button className="flex-1" variant="outline" onClick={submit}>Re-run Analysis</Button>
+      <Button className="flex-1" variant="outline">View History</Button>
+    </MobileActionBar>
+
+    <ModuleFormSection title="History (mobile accordion)">
+      <MobileHistoryAccordion items={history.map((h) => ({ id: h.id, title: `${h.patientId} — ${h.result.score.toFixed(1)} (${h.result.severity})`, detail: h.result.summary, meta: new Date(h.result.generatedAt).toLocaleString() }))} />
+    </ModuleFormSection>
   </div>;
 }

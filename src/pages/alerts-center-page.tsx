@@ -1,7 +1,13 @@
 import { useRTStore } from '@/lib/rt-store';
-import { SeverityBadge } from '@/components/rt/reusable';
+import { MobileAlertList } from '@/components/mobile/mobile-ui';
 
 export function AlertsCenterPage() {
   const { notifications } = useRTStore();
-  return <div className="p-6 space-y-3"><h1 className="text-2xl font-bold">Alerts Center</h1>{notifications.map((n) => <div key={n.id} className="rounded border p-2 flex justify-between"><span>{n.patientId} - {n.message}</span><SeverityBadge severity={n.severity} /></div>)}</div>;
+
+  return (
+    <div className="space-y-3 p-3 md:p-6">
+      <h1 className="hidden text-2xl font-bold md:block">Alerts Center</h1>
+      <MobileAlertList items={notifications.map((n) => ({ id: n.id, title: `${n.patientId} • ${n.moduleKey}`, detail: n.message, severity: n.severity }))} />
+    </div>
+  );
 }
