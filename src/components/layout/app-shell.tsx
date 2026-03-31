@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
+import { AppLogo } from '@/components/branding/app-logo';
 
 const navItems = [
   { label: 'Dashboard', to: '/' },
@@ -17,7 +18,10 @@ export function AppShell({ title, children }: { title: string; children: ReactNo
     <div className="mx-auto min-h-screen max-w-7xl px-3 py-4 md:px-6">
       <div className="grid gap-4 md:grid-cols-[240px_1fr]">
         <aside className="rounded-xl border border-border bg-card p-3">
-          <h1 className="mb-4 text-lg font-semibold text-primary">OnkoAI RT Platform</h1>
+          <div className="mb-4 flex items-center gap-3">
+            <AppLogo className="h-10 w-10" />
+            <h1 className="text-lg font-semibold text-primary">OnkoAI RT Platform</h1>
+          </div>
           <nav className="space-y-1">
             {navItems.map((item) => (
               <NavLink
