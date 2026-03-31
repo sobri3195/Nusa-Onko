@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { matchesSearch } from '@/lib/project-utils';
 import { Button } from '@/components/ui/button';
+import { featureRoadmap } from '@/data/featureRoadmap';
 
 function groupProjectsBy<T extends keyof Project>(projects: Project[], key: T): Record<string, Project[]> {
   return projects.reduce<Record<string, Project[]>>((acc, project) => {
@@ -52,6 +53,24 @@ export function HomePage({ projects, onDelete }: { projects: Project[]; onDelete
               <Link to={`/projects/${p.id}/edit`} className="rounded-md border px-2 py-1 text-xs">Update</Link>
               <Button variant="destructive" className="px-2 py-1 text-xs" onClick={() => onDelete(p.id)}>Delete</Button>
             </div>
+          </div>
+        ))}
+      </div>
+    </Card>
+
+    <Card>
+      <h2 className="mb-1 font-semibold">Usulan Pengembangan Fitur</h2>
+      <p className="mb-3 text-sm text-muted-foreground">Rencana fitur lanjutan untuk meningkatkan kolaborasi dan pelaporan tim.</p>
+      <div className="space-y-3">
+        {featureRoadmap.map((feature) => (
+          <div key={feature.title} className="rounded-md border border-border/70 p-3">
+            <h3 className="text-sm font-semibold">{feature.title}</h3>
+            <p className="mt-1 text-sm text-muted-foreground">{feature.summary}</p>
+            <ul className="mt-2 list-disc space-y-1 pl-4 text-sm">
+              {feature.points.map((point) => (
+                <li key={point}>{point}</li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>
