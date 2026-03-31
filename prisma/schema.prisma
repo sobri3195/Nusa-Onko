@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      String
+  createdAt DateTime @default(now())
+}
+
+model Patient {
+  id               String             @id
+  mrn              String             @unique
+  fullName         String
+  gender           String
+  age              Int
+  diagnosis        String
+  createdAt        DateTime           @default(now())
+  imagingStudies   ImagingStudy[]
+  treatmentPlans   TreatmentPlan[]
+  fractionRecords  FractionRecord[]
+  executions       ModuleExecution[]
+  notifications    Notification[]
+  waitListEntries  WaitListEntry[]
+  toxicities       ToxicityAssessment[]
+  documentAudits   DocumentAuditRecord[]
+}
+
+model ImagingStudy {
+  id         String   @id
+  patientId  String
+  modality   String
+  studyDate  DateTime
+  metadata   Json
+  patient    Patient  @relation(fields: [patientId], references: [id])
+}
+
+model TreatmentPlan {
+  id            String   @id
+  patientId     String
+  technique     String
+  totalDoseGy   Float
+  fractions     Int
+  status        String
+  patient       Patient  @relation(fields: [patientId], references: [id])
+}
+
+model FractionRecord {
+  id            String   @id
+  patientId     String
+  fractionNo    Int
+  setupNotes    String?
+  completedAt   DateTime
+  patient       Patient  @relation(fields: [patientId], references: [id])
+}
+
+model ModuleExecution {
+  id            String         @id @default(cuid())
+  moduleKey      String
+  patientId      String
+  inputPayload   Json
+  executedAt     DateTime      @default(now())
+  patient        Patient        @relation(fields: [patientId], references: [id])
+  result         ModuleResult?
+}
+
+model ModuleResult {
+  id               String           @id @default(cuid())
+  moduleExecutionId String          @unique
+  score            Float
+  severity         String
+  summary          String
+  outputPayload    Json
+  execution        ModuleExecution  @relation(fields: [moduleExecutionId], references: [id])
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  patientId   String
+  moduleKey   String
+  severity    String
+  message     String
+  acknowledged Boolean @default(false)
+  createdAt   DateTime @default(now())
+  patient     Patient  @relation(fields: [patientId], references: [id])
+}
+
+model WaitListEntry {
+  id             String   @id @default(cuid())
+  patientId      String
+  priorityScore  Float
+  priorityLabel  String
+  rationale      String
+  createdAt      DateTime @default(now())
+  patient        Patient   @relation(fields: [patientId], references: [id])
+}
+
+model ToxicityAssessment {
+  id            String   @id @default(cuid())
+  patientId      String
+  toxicityType   String
+  grade          Int
+  score          Float
+  assessedAt     DateTime @default(now())
+  patient        Patient  @relation(fields: [patientId], references: [id])
+}
+
+model DocumentAuditRecord {
+  id                 String   @id @default(cuid())
+  patientId          String
+  consistencyScore   Float
+  mismatchItems      Json
+  severityLevel      String
+  requiresManualReview Boolean
+  createdAt          DateTime @default(now())
+  patient            Patient  @relation(fields: [patientId], references: [id])
+}

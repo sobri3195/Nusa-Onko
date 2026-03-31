@@ -1,27 +1,26 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { RTDashboardPage } from '@/pages/rt-dashboard-page';
-import { RTPatientsPage } from '@/pages/rt-patients-page';
-import { RTPatientDetailPage } from '@/pages/rt-patient-detail-page';
-import { RTWorkflowPage } from '@/pages/rt-workflow-page';
-import { RTModulePage } from '@/pages/rt-modules-page';
-import { RTAlertsPage } from '@/pages/rt-alerts-page';
-import { RTReportsPage } from '@/pages/rt-reports-page';
-import { RTSettingsPage } from '@/pages/rt-settings-page';
+import { Link, Navigate, Route, Routes } from 'react-router-dom';
+import { RTStoreProvider } from '@/lib/rt-store';
+import { PatientsPage } from '@/pages/patients-page';
+import { PatientDetailPage } from '@/pages/patient-detail-page';
+import { ModulesOverviewPage } from '@/pages/modules-overview-page';
+import { ModuleDetailPage } from '@/pages/module-detail-page';
+import { AlertsCenterPage } from '@/pages/alerts-center-page';
+import { ReportsPage } from '@/pages/reports-page';
+
+function Nav() {
+  return <nav className="flex gap-4 border-b p-4 text-sm"><Link to="/patients">Patients</Link><Link to="/modules">Modules</Link><Link to="/alerts">Alerts</Link><Link to="/reports">Reports</Link></nav>;
+}
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<RTDashboardPage />} />
-      <Route path="/patients" element={<RTPatientsPage />} />
-      <Route path="/patients/:id" element={<RTPatientDetailPage />} />
-      <Route path="/workflow" element={<RTWorkflowPage />} />
-      <Route path="/modules/:moduleKey" element={<RTModulePage />} />
-      <Route path="/alerts" element={<RTAlertsPage />} />
-      <Route path="/reports" element={<RTReportsPage />} />
-      <Route path="/settings" element={<RTSettingsPage />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  );
+  return <RTStoreProvider><Nav /><Routes>
+    <Route path="/" element={<Navigate to="/modules" replace />} />
+    <Route path="/patients" element={<PatientsPage />} />
+    <Route path="/patients/:id" element={<PatientDetailPage />} />
+    <Route path="/modules" element={<ModulesOverviewPage />} />
+    <Route path="/modules/:moduleKey" element={<ModuleDetailPage />} />
+    <Route path="/alerts" element={<AlertsCenterPage />} />
+    <Route path="/reports" element={<ReportsPage />} />
+  </Routes></RTStoreProvider>;
 }
 
 export default App;
