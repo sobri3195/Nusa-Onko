@@ -44,3 +44,15 @@ export interface NotificationItem {
   message: string;
   createdAt: string;
 }
+
+export type ModuleFeatureStatus = 'planned' | 'active' | 'review' | 'retired';
+
+export interface ModuleFeatureItem {
+  id: string;
+  moduleKey: string;
+  name: string;
+  status: ModuleFeatureStatus;
+  source: 'default' | 'custom';
+  note?: string;
+  updatedAt: string;
+}
