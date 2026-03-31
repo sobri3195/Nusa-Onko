@@ -31,6 +31,7 @@ export function HomePage({ projects, onDelete }: { projects: Project[]; onDelete
       <div className="mt-4 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
         <Link to="/projects/new" className="rounded-md bg-white px-3 py-2 text-center text-sm font-semibold text-indigo-700">Create</Link>
         <Link to="/projects" className="rounded-md bg-white/20 px-3 py-2 text-center text-sm font-semibold">Read</Link>
+        <Link to="/modules" className="rounded-md bg-white/20 px-3 py-2 text-center text-sm font-semibold">Modules</Link>
         {recent[0] ? <Link to={`/projects/${recent[0].id}/edit`} className="rounded-md bg-white/20 px-3 py-2 text-center text-sm font-semibold">Update</Link> : null}
       </div>
     </div>
