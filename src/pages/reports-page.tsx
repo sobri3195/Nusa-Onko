@@ -3,6 +3,17 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useRTStore } from '@/lib/rt-store';
 import { MODULE_MAP } from '@/services/module-definitions';
+import { Button } from '@/components/ui/button';
+
+const downloadTextFile = (filename: string, content: string, mimeType = 'text/plain;charset=utf-8') => {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+};
 
 export function ReportsPage() {
   const { executions, notifications, patients } = useRTStore();
@@ -26,6 +37,28 @@ export function ReportsPage() {
     .sort((a, b) => b.executionCount - a.executionCount)[0];
 
   const lastRun = executions[0];
+  const reportDate = new Date().toISOString().slice(0, 10);
+
+  const exportJson = () => {
+    downloadTextFile(`nusa-onko-report-${reportDate}.json`, JSON.stringify({
+      generatedAt: new Date().toISOString(),
+      totalExecutions: executions.length,
+      totalAlerts: notifications.length,
+      moduleUsage,
+      severityDistribution,
+    }, null, 2), 'application/json;charset=utf-8');
+  };
+
+  const exportCsv = () => {
+    const rows = [
+      ['module_key', 'module_name', 'run_count'],
+      ...moduleUsage.map(([moduleKey, count]) => [moduleKey, MODULE_MAP[moduleKey]?.name ?? moduleKey, String(count)]),
+    ];
+    const content = rows
+      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    downloadTextFile(`nusa-onko-module-usage-${reportDate}.csv`, content, 'text/csv;charset=utf-8');
+  };
 
   return (
     <div className="space-y-4 p-3 md:p-6">
@@ -66,7 +99,13 @@ export function ReportsPage() {
       </section>
 
       <Card className="space-y-3 p-4">
-        <h2 className="font-semibold">Laporan Penggunaan Modul</h2>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-semibold">Laporan Penggunaan Modul</h2>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={exportCsv} disabled={moduleUsage.length === 0}>Export CSV</Button>
+            <Button variant="outline" onClick={exportJson}>Export JSON</Button>
+          </div>
+        </div>
         {moduleUsage.length === 0 ? (
           <p className="text-sm text-muted-foreground">Belum ada data laporan. Jalankan modul terlebih dahulu.</p>
         ) : (

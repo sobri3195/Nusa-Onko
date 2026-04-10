@@ -4,9 +4,10 @@ import { MobileAlertList } from '@/components/mobile/mobile-ui';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 
 export function AlertsCenterPage() {
-  const { notifications } = useRTStore();
+  const { notifications, clearNotifications } = useRTStore();
   const [query, setQuery] = useState('');
   const [severity, setSeverity] = useState('all');
 
@@ -39,6 +40,15 @@ export function AlertsCenterPage() {
           <option value="moderate">Moderate</option>
           <option value="low">Low</option>
         </Select>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        <Button variant="outline" onClick={() => clearNotifications((item) => filtered.some((entry) => entry.id === item.id))} disabled={filtered.length === 0}>
+          Hapus Alert Terfilter ({filtered.length})
+        </Button>
+        <Button variant="outline" onClick={() => clearNotifications()} disabled={notifications.length === 0}>
+          Hapus Semua Alert
+        </Button>
       </div>
 
       {filtered.length === 0 ? (
