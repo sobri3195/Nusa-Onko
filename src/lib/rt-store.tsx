@@ -1,9 +1,24 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { PATIENTS } from '@/data/patient-seed';
 import { MODULE_DEFINITIONS, MODULE_MAP } from '@/services/module-definitions';
 import { AnalysisResult, ModuleExecutionRecord, ModuleFeatureItem, ModuleFeatureStatus, NotificationItem } from '@/types/ai-modules';
 
 const now = () => new Date().toISOString();
+const STORAGE_KEYS = {
+  executions: 'nusa_onko_rt_executions',
+  notifications: 'nusa_onko_rt_notifications',
+  moduleFeatures: 'nusa_onko_rt_module_features',
+} as const;
+
+const safeParse = <T,>(raw: string | null, fallback: T): T => {
+  if (!raw) return fallback;
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed as T;
+  } catch {
+    return fallback;
+  }
+};
 
 const buildDefaultFeatureState = (): ModuleFeatureItem[] => MODULE_DEFINITIONS.flatMap((moduleDef) => moduleDef.features.map((feature) => ({
   id: crypto.randomUUID(),
@@ -21,18 +36,35 @@ interface Store {
   moduleFeatures: ModuleFeatureItem[];
   runModule: (moduleKey: string, input: Record<string, unknown>) => AnalysisResult;
   getPatientExecutions: (patientId: string) => ModuleExecutionRecord[];
+  clearExecutions: () => void;
   addModuleFeature: (moduleKey: string, name: string) => void;
   updateModuleFeature: (id: string, updates: Partial<Pick<ModuleFeatureItem, 'status' | 'note' | 'name'>>) => void;
   removeModuleFeature: (id: string) => void;
   resetModuleFeatures: (moduleKey: string) => void;
+  clearNotifications: (predicate?: (item: NotificationItem) => boolean) => void;
 }
 
 const Ctx = createContext<Store | null>(null);
 
 export function RTStoreProvider({ children }: { children: React.ReactNode }) {
-  const [executions, setExecutions] = useState<ModuleExecutionRecord[]>([]);
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [moduleFeatures, setModuleFeatures] = useState<ModuleFeatureItem[]>(() => buildDefaultFeatureState());
+  const [executions, setExecutions] = useState<ModuleExecutionRecord[]>(() => safeParse(localStorage.getItem(STORAGE_KEYS.executions), []));
+  const [notifications, setNotifications] = useState<NotificationItem[]>(() => safeParse(localStorage.getItem(STORAGE_KEYS.notifications), []));
+  const [moduleFeatures, setModuleFeatures] = useState<ModuleFeatureItem[]>(() => {
+    const stored = safeParse<ModuleFeatureItem[] | null>(localStorage.getItem(STORAGE_KEYS.moduleFeatures), null);
+    return stored && stored.length > 0 ? stored : buildDefaultFeatureState();
+  });
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.executions, JSON.stringify(executions));
+  }, [executions]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.notifications, JSON.stringify(notifications));
+  }, [notifications]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.moduleFeatures, JSON.stringify(moduleFeatures));
+  }, [moduleFeatures]);
 
   const runModule = (moduleKey: string, input: Record<string, unknown>) => {
     const history = executions.filter((e) => e.moduleKey === moduleKey && e.patientId === input.patientId);
@@ -99,6 +131,10 @@ export function RTStoreProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const clearNotifications = (predicate?: (item: NotificationItem) => boolean) => {
+    setNotifications((prev) => predicate ? prev.filter((item) => !predicate(item)) : []);
+  };
+
   const value = useMemo(() => ({
     patients: PATIENTS,
     executions,
@@ -106,10 +142,12 @@ export function RTStoreProvider({ children }: { children: React.ReactNode }) {
     moduleFeatures,
     runModule,
     getPatientExecutions: (patientId: string) => executions.filter((e) => e.patientId === patientId),
+    clearExecutions: () => setExecutions([]),
     addModuleFeature,
     updateModuleFeature,
     removeModuleFeature,
     resetModuleFeatures,
+    clearNotifications,
   }), [executions, notifications, moduleFeatures]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
